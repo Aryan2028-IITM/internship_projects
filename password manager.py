@@ -1,5 +1,6 @@
 import csv
 import os
+import random
 from cryptography.fernet import Fernet
 
 KEY_FILE = "secret.key"
@@ -42,6 +43,11 @@ def change_password(website):
     else:
         print("Password not found!")
 
+def generate_password():
+    password = ""
+    for i in range(12):
+        password += chr(random.randint(33, 126))
+    return password
 
 def get_password(website):
     found = False
@@ -65,10 +71,21 @@ def main():
         print("4. Exit")
         choice = int(input("Enter your choice: "))
         if choice == 1:
-            website = input("Enter the website: ")
-            username = input("Enter the username: ")
-            password = input("Enter the password: ")
-            add_password(website, username, password)
+            print("1. Add your own Password")
+            print("2. Generate Password")
+            nested_choice = int(input("Enter your choice: "))
+            if nested_choice==1:
+                website = input("Enter the website: ")
+                username = input("Enter the username: ")
+                password = input("Enter the password: ")
+                add_password(website, username, password)
+            elif nested_choice==2:
+                website = input("Enter the website: ")
+                username = input("Enter the username: ")
+                password = generate_password()
+                add_password(website, username, password)
+            else:
+                print("Invalid choice!")
         elif choice == 2:
             website = input("Enter the website: ")
             get_password(website)
