@@ -1,10 +1,12 @@
+#---------------------------importing necessary libraries---------------------------
 import csv
 import os
 import random
 from cryptography.fernet import Fernet
 
+#---------------------------make a file to store key---------------------------
 KEY_FILE = "secret.key"
-
+#---------------------------storing key in file created above if not stored earlier otherwise fetching it---------------------------
 def load_key():
     if os.path.exists(KEY_FILE):
         with open(KEY_FILE, "rb") as key_file:
@@ -17,13 +19,16 @@ def load_key():
 
 key = Fernet(load_key())
 
+#---------------------------creating function to add passwords---------------------------
+
 def add_password(website, username, password):
     encrypted_password = key.encrypt(password.encode()).decode()
     with open("passwords.csv", "a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([website, username, encrypted_password])
     print("Password for",website,"added successfully!")
-
+    
+#---------------------------creating function to change password---------------------------
 
 def change_password(website):
     found = False
@@ -43,11 +48,15 @@ def change_password(website):
     else:
         print("Password not found!")
 
+#---------------------------creating function to generate a random password---------------------------
+
 def generate_password():
     password = ""
     for i in range(12):
         password += chr(random.randint(33, 126))
     return password
+
+#---------------------------creating a function to seaarch a password for a particualar website---------------------------
 
 def get_password(website):
     found = False
@@ -61,6 +70,8 @@ def get_password(website):
                 break
     if not found:
         print("Password not found!")
+
+#---------------------------main program---------------------------
 
 def main():
     while True:
